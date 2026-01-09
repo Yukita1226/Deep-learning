@@ -3,23 +3,25 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "gemini-io-app"
+name = "llama-ai-app"
 version = "0.1.0"
-description = "A modular Python application for Gemini API integration"
+description = "A professional LLM integration package using Llama 3 via Groq"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [
     { name = "Your Name", email = "your.email@university.edu" }
 ]
+# Updated dependencies for your new migration
 dependencies = [
-    "google-genai",
-    "python-dotenv",
-    "typing-extensions>=4.13.2,<=4.14.0"
+    "groq>=0.15.0",      # Required for Llama 3 integration
+    "python-dotenv",    # For secure credential management
+    "typing-extensions>=4.13.2"
 ]
 
 [project.scripts]
-gemini-run = "ai.analyzis:main"
+# Professional naming for your terminal command
+ai-start = "ai.analyzis:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ai*"]
+include = ["ai*"] # Ensures your 'ai' folder is correctly packaged
