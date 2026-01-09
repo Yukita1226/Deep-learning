@@ -1,0 +1,1 @@
+cmd to run = pip install -e . (version 3.12.10)

@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gemini-io-app"
+version = "0.1.0"
+description = "A modular Python application for Gemini API integration"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [
+    { name = "Your Name", email = "your.email@university.edu" }
+]
+dependencies = [
+    "google-genai",
+    "python-dotenv",
+    "typing-extensions>=4.13.2,<=4.14.0"
+]
+
+[project.scripts]
+gemini-run = "ai.analyzis:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ai*"]
