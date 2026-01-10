@@ -5,23 +5,24 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "llama-ai-app"
 version = "0.1.0"
-description = "A professional LLM integration package using Llama 3 via Groq"
+description = "A professional LLM grading system with RAG capabilities via Groq and Tavily"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [
     { name = "Your Name", email = "your.email@university.edu" }
 ]
-# Updated dependencies for your new migration
+# เพิ่ม Tavily เข้าไปเพื่อให้ระบบ Search ทำงานได้
 dependencies = [
-    "groq>=0.15.0",      # Required for Llama 3 integration
-    "python-dotenv",    # For secure credential management
+    "groq>=0.15.0",   
+    "tavily-python",    
+    "python-dotenv",    
     "typing-extensions>=4.13.2"
 ]
 
 [project.scripts]
-# Professional naming for your terminal command
+# คำสั่งสำหรับรันโปรเจกต์ผ่าน Terminal
 ai-start = "ai.analyzis:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ai*"] # Ensures your 'ai' folder is correctly packaged
+include = ["ai*"] # ตรวจสอบให้แน่ใจว่าโฟลเดอร์ ai มีไฟล์ __init__.py อยู่ข้างใน
