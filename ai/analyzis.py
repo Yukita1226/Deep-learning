@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 def main():
-    # โหลด Keys
+ 
     GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
     TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY")
     
@@ -19,7 +19,14 @@ def main():
     tavily = TavilyClient(api_key=TAVILY_API_KEY)
 
 
-    quiz_input = "if every animal have 4 leg but some human have 2 leg can we assume some human are animal"
+    quiz_input = """
+    Question: Explain the importance of the Ayutthaya Kingdom in Thai history.
+    Student Answer:
+    Ayutthaya was the capital of Thailand for 417 years. It was very important because 
+    it was a center of trade. However, the most famous part is that Ayutthaya was 
+    never invaded by any foreign powers and remained completely peaceful until 
+    it voluntarily joined the Bangkok period in 1950. The architecture is also nice.
+    """
 
     try:
   
@@ -35,10 +42,30 @@ def main():
 
     
         if needs_search:
-            print("Action: Searching Tavily for facts...")
+                    print("Action: Optimizing query for Tavily...")
 
-            search_res = tavily.search(query=quiz_input, search_depth="basic", max_results=2)
-            web_info = "\n".join([r['content'] for r in search_res['results']])
+                
+                    search_query_prompt = (
+                        "Extract 3-5 essential Thai keywords for a search engine from this text. "
+                        "Output ONLY the keywords separated by spaces. No numbers, no headers, no intro."
+                        f"\nText: {quiz_input}"
+                    )
+                    
+                    search_query_res = client.chat.completions.create(
+                        model="llama-3.1-8b-instant",
+                        messages=[{"role": "user", "content": search_query_prompt}],
+                        temperature=0 
+                    )
+                    
+           
+                    optimized_query = search_query_res.choices[0].message.content.strip()
+                    
+              
+                    optimized_query = optimized_query[:350] 
+                    
+                    print(f"Optimized Query: {optimized_query}")
+
+
 
    
         system_content = f"""
