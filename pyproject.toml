@@ -9,19 +9,34 @@ description = "A professional LLM integration package using Llama 3 via Groq"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [
-    { name = "Your Name", email = "your.email@university.edu" }
+  { name = "Your Name", email = "your.email@university.edu" }
 ]
-# Updated dependencies for your new migration
+
 dependencies = [
-    "groq>=0.15.0",      # Required for Llama 3 integration
-    "python-dotenv",    # For secure credential management
-    "typing-extensions>=4.13.2"
+  "groq>=0.15.0",
+  "python-dotenv",
+  "typing-extensions>=4.13.2",
+
+  # OCR (หลัก - local)
+  "opencv-python",
+  "Pillow",
+  "pytesseract",
+  "numpy",
+
+  # OCR (Azure - primary)
+  "azure-ai-vision-imageanalysis>=1.0.0",
+  "azure-core>=1.30.0",
+]
+
+[project.optional-dependencies]
+# ติดตั้งเพิ่มเฉพาะตอนอยากใช้ fallback แบบ local (EasyOCR)
+ocr_easy = [
+  "easyocr",
 ]
 
 [project.scripts]
-# Professional naming for your terminal command
-ai-start = "ai.analyzis:main"
+ai-start = "ai.analysis:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ai*"] # Ensures your 'ai' folder is correctly packaged
+include = ["ai*"]

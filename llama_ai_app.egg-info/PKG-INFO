@@ -8,5 +8,13 @@ Description-Content-Type: text/markdown
 Requires-Dist: groq>=0.15.0
 Requires-Dist: python-dotenv
 Requires-Dist: typing-extensions>=4.13.2
+Requires-Dist: opencv-python
+Requires-Dist: Pillow
+Requires-Dist: pytesseract
+Requires-Dist: numpy
+Requires-Dist: azure-ai-vision-imageanalysis>=1.0.0
+Requires-Dist: azure-core>=1.30.0
+Provides-Extra: ocr-easy
+Requires-Dist: easyocr; extra == "ocr-easy"
 
 cmd to run = pip install -e . (version 3.12.10)
