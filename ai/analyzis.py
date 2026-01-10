@@ -18,12 +18,11 @@ def main():
     client = Groq(api_key=GROQ_API_KEY)
     tavily = TavilyClient(api_key=TAVILY_API_KEY)
 
-    # --- SINGLE INPUT STRING ---
-    # คุณสามารถเปลี่ยนข้อความในนี้ได้เลย ระบบจะปรับตัวตามเนื้อหาเอง
-    quiz_input = "คำถาม: ประเทศไทยมีกี่ฤดู และแต่ละฤดูเป็นอย่างไร | คำตอบจากผู้เรียน: ประเทศไทยมี 4 ฤดู มีฤดูใบไม้ผลิด้วย"
+
+    quiz_input = "if every animal have 4 leg but some human have 2 leg can we assume some human are animal"
 
     try:
-        # 1. Router: ตรวจสอบว่าต้องใช้ข้อมูลภายนอกหรือไม่
+  
         router_prompt = f"Does this need real-time web search for factual grading? Answer 'YES' or 'NO' only. Input: {quiz_input}"
         router_res = client.chat.completions.create(
             model="llama-3.1-8b-instant",
@@ -37,7 +36,7 @@ def main():
     
         if needs_search:
             print("Action: Searching Tavily for facts...")
-            # ดึงข้อมูลมาเป็น Context เพื่อลด Hallucination
+
             search_res = tavily.search(query=quiz_input, search_depth="basic", max_results=2)
             web_info = "\n".join([r['content'] for r in search_res['results']])
 
