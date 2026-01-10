@@ -1,12 +1,12 @@
 Metadata-Version: 2.4
-Name: gemini-io-app
+Name: llama-ai-app
 Version: 0.1.0
-Summary: A modular Python application for Gemini API integration
+Summary: A professional LLM integration package using Llama 3 via Groq
 Author-email: Your Name <your.email@university.edu>
 Requires-Python: >=3.12
 Description-Content-Type: text/markdown
-Requires-Dist: google-genai
+Requires-Dist: groq>=0.15.0
 Requires-Dist: python-dotenv
-Requires-Dist: typing-extensions<=4.14.0,>=4.13.2
+Requires-Dist: typing-extensions>=4.13.2
 
 cmd to run = pip install -e . (version 3.12.10)

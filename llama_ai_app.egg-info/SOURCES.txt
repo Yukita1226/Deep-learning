@@ -1,0 +1,10 @@
+README.md
+pyproject.toml
+ai/__init__.py
+ai/analyzis.py
+llama_ai_app.egg-info/PKG-INFO
+llama_ai_app.egg-info/SOURCES.txt
+llama_ai_app.egg-info/dependency_links.txt
+llama_ai_app.egg-info/entry_points.txt
+llama_ai_app.egg-info/requires.txt
+llama_ai_app.egg-info/top_level.txt

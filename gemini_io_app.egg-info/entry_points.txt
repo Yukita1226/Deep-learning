@@ -1,2 +1,2 @@
 [console_scripts]
-gemini-run = ai.analyzis:main
+ai-run = ai.analyzis:main
