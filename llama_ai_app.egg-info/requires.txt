@@ -2,12 +2,3 @@ groq>=0.15.0
 tavily-python
 python-dotenv
 typing-extensions>=4.13.2
-opencv-python
-Pillow
-pytesseract
-numpy
-azure-ai-vision-imageanalysis>=1.0.0
-azure-core>=1.30.0
-
-[ocr_easy]
-easyocr
