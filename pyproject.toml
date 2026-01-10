@@ -5,38 +5,24 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "llama-ai-app"
 version = "0.1.0"
-description = "A professional LLM integration package using Llama 3 via Groq"
+description = "A professional LLM grading system with RAG capabilities via Groq and Tavily"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [
   { name = "Your Name", email = "your.email@university.edu" }
 ]
-
+# เพิ่ม Tavily เข้าไปเพื่อให้ระบบ Search ทำงานได้
 dependencies = [
-  "groq>=0.15.0",
-  "python-dotenv",
-  "typing-extensions>=4.13.2",
-
-  # OCR (หลัก - local)
-  "opencv-python",
-  "Pillow",
-  "pytesseract",
-  "numpy",
-
-  # OCR (Azure - primary)
-  "azure-ai-vision-imageanalysis>=1.0.0",
-  "azure-core>=1.30.0",
-]
-
-[project.optional-dependencies]
-# ติดตั้งเพิ่มเฉพาะตอนอยากใช้ fallback แบบ local (EasyOCR)
-ocr_easy = [
-  "easyocr",
+    "groq>=0.15.0",   
+    "tavily-python",    
+    "python-dotenv",    
+    "typing-extensions>=4.13.2"
 ]
 
 [project.scripts]
-ai-start = "ai.analysis:main"
+# คำสั่งสำหรับรันโปรเจกต์ผ่าน Terminal
+ai-start = "ai.analyzis:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ai*"]
+include = ["ai*"] # ตรวจสอบให้แน่ใจว่าโฟลเดอร์ ai มีไฟล์ __init__.py อยู่ข้างใน
