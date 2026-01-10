@@ -1,87 +1,77 @@
 import os
 import sys
 from groq import Groq
+from tavily import TavilyClient
 from dotenv import load_dotenv
 
-load_dotenv() 
+load_dotenv()
 
 def main():
-    quizandanz = (
-        "ประเทศไทยมีกี่ฤดู และแต่ละฤดูมีลักษณะอย่างไร"
-        "ประเทศไทยมีทั้งหมด 4 ฤดู ได้แก่ ฤดูร้อน ฤดูฝน ฤดูหนาว และฤดูใบไม้ผลิฤดูร้อนจะมีอากาศร้อนจัดและแดดแรงฤดูฝนจะมีฝนตกชุกและอากาศชื้นฤดูหนาวอากาศจะเย็นลงเล็กน้อยส่วนฤดูใบไม้ผลิเป็นช่วงที่อากาศกำลังสบาย ไม่ร้อนหรือหนาวเกินไป"
-    )
-
-    api_key = os.environ.get("GROQ_API_KEY")
-    if not api_key:
-        print("CRITICAL ERROR: GROQ_API_KEY not found.")
+    # โหลด Keys
+    GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+    TAVILY_API_KEY = os.environ.get("TAVILY_API_KEY")
+    
+    if not GROQ_API_KEY or not TAVILY_API_KEY:
+        print("CRITICAL ERROR: Keys missing.")
         sys.exit(1)
 
-    system_content = f"""
-You are a STRICT and ADAPTIVE grading assistant.
+    client = Groq(api_key=GROQ_API_KEY)
+    tavily = TavilyClient(api_key=TAVILY_API_KEY)
 
-Your first step is to IDENTIFY the type of the user's input.
-Classify it into ONE primary category:
-- CALCULATION (math, logic, strategy, step-based problems)
-- ESSAY (writing, explanation, reflection, descriptive answers)
-- DEBATE / ARGUMENT (claims, opinions, reasoning, persuasion)
-- FACTUAL QA (short factual questions/answers)
-- OTHER (specify implicitly in reasoning)
-
-LANGUAGE RULE (MANDATORY):
-- You MUST respond in the SAME LANGUAGE as the user's input.
-- Do NOT mix languages.
-
-SCORING PRIORITY BY TYPE:
-
-1) CALCULATION:
-   - Strategy, method, and final result are CRITICAL.
-   - Correct result with flawed reasoning → penalize.
-   - Wrong result → score MUST NOT exceed 50%.
-   - Major logical error → heavy penalty regardless of clarity.
-
-2) ESSAY:
-   - Grammar, clarity, structure, and coherence are PRIMARY.
-   - Factual accuracy is important but secondary unless the essay is fact-based.
-   - Poor grammar or unclear structure → significant penalty.
-
-3) DEBATE / ARGUMENT:
-   - Factual accuracy and strength of reasoning are PRIMARY.
-   - Unsupported claims, logical fallacies, or false facts → heavy penalty.
-   - Writing style alone MUST NOT raise the score.
-
-4) FACTUAL QA:
-   - Factual correctness is ABSOLUTE.
-   - Any major factual error → score MUST NOT exceed 60%.
-
-GENERAL RULES (MANDATORY):
-- Fluent language MUST NOT compensate for incorrect facts or logic.
-- Sounding reasonable but being wrong MUST be penalized.
-- Do NOT inflate scores.
-
-OUTPUT FORMAT (EXACT, NO EXTRA TEXT):
-Score: <0-100>%
-Reason: <2-6 sentences explaining the evaluation based on the identified type>
-
-Be strict, fair, and consistent.
-
-"""
-
-    client = Groq(api_key=api_key)
+    # --- SINGLE INPUT STRING ---
+    # คุณสามารถเปลี่ยนข้อความในนี้ได้เลย ระบบจะปรับตัวตามเนื้อหาเอง
+    quiz_input = "คำถาม: ประเทศไทยมีกี่ฤดู และแต่ละฤดูเป็นอย่างไร | คำตอบจากผู้เรียน: ประเทศไทยมี 4 ฤดู มีฤดูใบไม้ผลิด้วย"
 
     try:
-        chat_completion = client.chat.completions.create(
+        # 1. Router: ตรวจสอบว่าต้องใช้ข้อมูลภายนอกหรือไม่
+        router_prompt = f"Does this need real-time web search for factual grading? Answer 'YES' or 'NO' only. Input: {quiz_input}"
+        router_res = client.chat.completions.create(
+            model="llama-3.1-8b-instant",
+            messages=[{"role": "user", "content": router_prompt}],
+            temperature=0
+        )
+        
+        needs_search = "YES" in router_res.choices[0].message.content.upper()
+        web_info = ""
+
+    
+        if needs_search:
+            print("Action: Searching Tavily for facts...")
+            # ดึงข้อมูลมาเป็น Context เพื่อลด Hallucination
+            search_res = tavily.search(query=quiz_input, search_depth="basic", max_results=2)
+            web_info = "\n".join([r['content'] for r in search_res['results']])
+
+   
+        system_content = f"""
+You are a UNIVERSITY-LEVEL GRADING EXPERT. 
+Rules:
+1. Identify type (CALCULATION, ESSAY, etc.)
+2. Use the provided WEB CONTEXT as the absolute source of truth.
+3. If the answer contradicts WEB CONTEXT (e.g., wrong number of seasons), score must be below 50%.
+4. Respond in the SAME LANGUAGE as the user.
+
+WEB CONTEXT:
+{web_info if web_info else "No external data needed."}
+
+OUTPUT:
+Score: <0-100>%
+Reason: <concise evaluation>
+"""
+
+        final_res = client.chat.completions.create(
             model="llama-3.3-70b-versatile",
             messages=[
                 {"role": "system", "content": system_content},
-                {"role": "user", "content": quizandanz}
+                {"role": "user", "content": quiz_input}
             ],
+            temperature=0.1 
         )
 
-        print("Success:")
-        print(chat_completion.choices[0].message.content)
+        print("\n--- Evaluation Result ---")
+        print(final_res.choices[0].message.content)
 
     except Exception as e:
-        print(f"API Error: {e}")
+        print(f"Error: {e}")
 
 if __name__ == "__main__":
     main()
