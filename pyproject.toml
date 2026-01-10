@@ -5,24 +5,47 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "llama-ai-app"
 version = "0.1.0"
-description = "A professional LLM grading system with RAG capabilities via Groq and Tavily"
+description = "A professional LLM grading system with RAG and OCR (TrOCR, Azure, Tesseract, EasyOCR)"
 readme = "README.md"
 requires-python = ">=3.12"
 authors = [
   { name = "Your Name", email = "your.email@university.edu" }
 ]
-# เพิ่ม Tavily เข้าไปเพื่อให้ระบบ Search ทำงานได้
+
+# =========================
+# ALL DEPENDENCIES (DEFAULT)
+# =========================
 dependencies = [
-    "groq>=0.15.0",   
-    "tavily-python",    
-    "python-dotenv",    
-    "typing-extensions>=4.13.2"
+  # ---- LLM / RAG ----
+  "groq>=0.15.0",
+  "tavily-python>=0.3.0",
+  "python-dotenv>=1.0.0",
+  "typing-extensions>=4.13.2",
+
+  # ---- Image / OCR Base ----
+  "opencv-python>=4.10.0.0",
+  "Pillow>=10.0.0",
+  "numpy>=1.26.0",
+
+  # ---- TrOCR (Handwritten OCR) ----
+  "transformers>=4.43.0",
+  "torch",
+  "torchvision",
+
+  # ---- Azure OCR ----
+  "azure-ai-vision-imageanalysis>=1.0.0",
+  "azure-core>=1.30.0",
+
+  # ---- Local OCR Fallback ----
+  "pytesseract>=0.3.10",
+  "easyocr>=1.7.1",
 ]
 
 [project.scripts]
-# คำสั่งสำหรับรันโปรเจกต์ผ่าน Terminal
-ai-start = "ai.analyzis:main"
+# ⚠️ ตรวจสอบให้ตรงกับไฟล์จริง
+# ถ้าไฟล์คือ ai/analysis.py
+ai-start = "ai.analysis:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["ai*"] # ตรวจสอบให้แน่ใจว่าโฟลเดอร์ ai มีไฟล์ __init__.py อยู่ข้างใน
+include = ["ai*"]
