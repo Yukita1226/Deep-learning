@@ -1,0 +1,10 @@
+streamlit           
+groq               
+tavily-python      
+python-dotenv       
+pytesseract       
+easyocr         
+opencv-python     
+pillow            
+torch              
+transformers    
