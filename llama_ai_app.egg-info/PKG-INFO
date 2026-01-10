@@ -1,13 +1,23 @@
 Metadata-Version: 2.4
 Name: llama-ai-app
 Version: 0.1.0
-Summary: A professional LLM grading system with RAG capabilities via Groq and Tavily
+Summary: A professional LLM grading system with RAG and OCR (TrOCR, Azure, Tesseract, EasyOCR)
 Author-email: Your Name <your.email@university.edu>
 Requires-Python: >=3.12
 Description-Content-Type: text/markdown
 Requires-Dist: groq>=0.15.0
-Requires-Dist: tavily-python
-Requires-Dist: python-dotenv
+Requires-Dist: tavily-python>=0.3.0
+Requires-Dist: python-dotenv>=1.0.0
 Requires-Dist: typing-extensions>=4.13.2
+Requires-Dist: opencv-python>=4.10.0.0
+Requires-Dist: Pillow>=10.0.0
+Requires-Dist: numpy>=1.26.0
+Requires-Dist: transformers>=4.43.0
+Requires-Dist: torch
+Requires-Dist: torchvision
+Requires-Dist: azure-ai-vision-imageanalysis>=1.0.0
+Requires-Dist: azure-core>=1.30.0
+Requires-Dist: pytesseract>=0.3.10
+Requires-Dist: easyocr>=1.7.1
 
 cmd to run = pip install -e . (version 3.12.10)
